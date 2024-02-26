@@ -1,41 +1,35 @@
 name: Deploy to Minikube using GitHub Actions
 
-on:
-  push:
+on: [push]
 
 jobs:
   deploy_to_minikube:
     runs-on: ubuntu-latest
     name: Deploy Node.js Docker Image to Minikube
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Start Minikube
-        uses: medyagh/setup-minikube@master
-        with:
-          name: Try the cluster !
+    - name: Start Minikube
+      uses: medyagh/setup-minikube@master
+      with:
+        name: Try the cluster !
+        run: kubectl get pods -A
 
-      - name: Build Docker image
-        run: |
-          export SHELL=/bin/bash
-          eval $(minikube -p minikube docker-env)
-          docker build -f ./Dockerfile -t devopshint/node-app:latest .
-          echo "Verifying images:"
-          docker images
+    - name: Build Docker image
+      run: |
+        export SHELL=/bin/bash
+        eval $(minikube -p minikube docker-env)
+        docker build -f ./Dockerfile -t devopshint/node-app:latest .
+        echo -n "Verifying images:"
+        docker images
 
-      - name: Deploy to Minikube
-        run: kubectl apply -f k8s-node-app.yaml || exit 1
-        # Added error handling if the apply command fails
+    - name: Deploy to Minikube
+      run: kubectl apply -f k8s-node-app.yaml || exit 1
+      # Added error handling if the apply command fails
 
-      - name: Test service URLs
-        run: |
-          minikube service list
-          minikube service nodejs-app --url
-          minikube logs --file=logs.txt
-          kubectl logs -l app=nodejs-app || true
-        timeout-minutes: 5
-
-      - name: Check job status
-        if: ${{ job.status != 'success' }}
-        run: echo "The job failed with status ${{ job.status }}"
+    - name: Test service URLs
+      run: |
+        minikube service list
+        minikube service nodejs-app --url
+      timeout-minutes: 5
