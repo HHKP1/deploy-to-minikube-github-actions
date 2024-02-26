@@ -14,7 +14,6 @@ jobs:
       run: |
           kubectl get svc -A
           kubectl get pods -A
-          kubectl get nc -A
     - name: Build image
       run: |
           export SHELL=/bin/bash
