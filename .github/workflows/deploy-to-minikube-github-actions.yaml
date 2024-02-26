@@ -11,12 +11,13 @@ jobs:
     - name: Start minikube
       uses: medyagh/setup-minikube@master
     - name: Try the cluster !
-      run: kubectl get pods -A
+      run: |
+          kubectl get pods -A
     - name: Build image
       run: |
           export SHELL=/bin/bash
           eval $(minikube -p minikube docker-env)
-          docker build -f ./Dockerfile -t devopshint/node-app:latest .
+          docker build -f ./Dockerfile -t devopshint/nodejs-app:latest .
           echo -n "verifying images:"
           docker images         
     - name: Deploy to minikube
@@ -24,5 +25,5 @@ jobs:
         kubectl apply -f k8s-node-app.yaml
     - name: Test service URLs
       run: |
-          minikube service list
-          minikube service nodejs-app --url
+        minikube service list
+        minikube service nodejs-app --url
