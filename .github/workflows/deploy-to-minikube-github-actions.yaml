@@ -23,7 +23,14 @@ jobs:
           docker images         
       - name: Deploy to minikube
         run: kubectl apply -f k8s-node-app.yaml
+      - name: Wait for service to be ready
+        run: |
+          echo "Waiting for service to be ready..."
+          while [[ $(kubectl get svc nodejs-app -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do
+              sleep 5
+          done
       - name: Test service URLs
         run: |
           minikube service list
           minikube service nodejs-app --url
+          curl $(minikube service nodejs-app --url)/version
