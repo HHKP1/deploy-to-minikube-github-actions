@@ -1,35 +1,39 @@
----
 name: Deploy to Minikube using GitHub Actions
 
 on:
   push:
-  
+
 jobs:
-  job1:
+  deploy_to_minikube:
     runs-on: ubuntu-latest
-    name: Build Node.js Docker Image and deploy to minikube
+    name: Deploy Node.js Docker Image to Minikube
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Start minikube
+      - name: Start Minikube
         uses: medyagh/setup-minikube@master
         with:
           name: Try the cluster !
 
-      - name: Build image
+      - name: Build Docker image
         run: |
           export SHELL=/bin/bash
           eval $(minikube -p minikube docker-env)
           docker build -f ./Dockerfile -t devopshint/node-app:latest .
           echo "Verifying images:"
-          docker images         
+          docker images
 
-      - name: Deploy to minikube
-        run: kubectl apply -f k8s-node-app.yaml
+      - name: Deploy to Minikube
+        run: kubectl apply -f k8s-node-app.yaml || exit 1
+        # Added error handling if the apply command fails
 
       - name: Test service URLs
         run: |
-          kubectl logs -l app=nodejs-app
           minikube service list
           minikube service nodejs-app --url
+          kubectl logs -l app=nodejs-app || true
+
+      - name: Check job status
+              if: ${{ job.status != 'success' }}
+              run: echo "The job failed with status ${{ job.status }}"
