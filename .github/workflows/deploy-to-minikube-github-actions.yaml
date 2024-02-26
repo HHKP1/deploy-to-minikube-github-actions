@@ -33,6 +33,9 @@ jobs:
 
     - name: Test service URLs
       run: |
+        kubectl get svc
         minikube service list
         minikube service nodejs-app --url
+        echo "------------------opening the service------------------"
+        minikube ip
         curl $(minikube service nodejs-app --url )/version
