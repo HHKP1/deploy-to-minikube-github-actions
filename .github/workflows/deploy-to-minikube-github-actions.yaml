@@ -33,6 +33,7 @@ jobs:
           minikube service list
           minikube service nodejs-app --url
           kubectl logs -l app=nodejs-app || true
+        timeout-minutes: 5
 
       - name: Check job status
         if: ${{ job.status != 'success' }}
