@@ -3,7 +3,7 @@ name: Deploy to Minikube using GitHub Actions
 on:
   - push
 jobs:
-  job1:
+  build:
     runs-on: ubuntu-latest
     name: build Node.js Docker Image and deploy to minikube
     steps:
@@ -23,15 +23,19 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_HUB_PASS }}
           docker push hhkp/node-app:latest
           echo -n "verifying images:"
-          docker images         
-      - name: Deploy to minikube
-        run: |
-          kubectl apply -f k8s-node-app.yaml
-          kubectl get pods -A
-          kubectl get svc -A
-          kubectl get deployment -A
+          docker images
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to minikube
+    steps:
+      -uses: actions/checkout@v2
+      run: |
+        kubectl apply -f k8s-node-app.yaml
+        kubectl get pods -A
+        kubectl get svc -A
+        kubectl get deployment -A
       - name: Test service URLs
-        run: |
-          minikube service list
-          minikube service nodejs-app --url
-          curl $(minikube service nodejs-app --url)/version
+      run: |
+        minikube service list
+        minikube service nodejs-app --url
+        curl $(minikube service nodejs-app --url)/version
