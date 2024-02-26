@@ -27,6 +27,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to minikube
+    needs: build
     steps:
       - uses: actions/checkout@v2
       - name: Deploy to minikube
