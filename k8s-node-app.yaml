@@ -2,22 +2,22 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: nodejs-app
+  name: node-app
   namespace: default
   labels:
-    app: nodejs-app
+    app: node-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nodejs-app
+      app: node-app
   template:
     metadata:
       labels:
-        app: nodejs-app
+        app: node-app
     spec:
       containers:
-      - name: nodejs-app
+      - name: node-app
         image: "devopshint/node-app:latest"
         ports:
           - containerPort: 3000
@@ -25,11 +25,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nodejs-app
+  name: node-app
   namespace: default
 spec:
   selector:
-    app: nodejs-app
+    app: node-app
   type: NodePort
   ports:
   - name: http
