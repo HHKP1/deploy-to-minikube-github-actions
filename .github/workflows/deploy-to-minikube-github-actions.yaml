@@ -12,7 +12,9 @@ jobs:
       uses: medyagh/setup-minikube@master
     - name: Try the cluster !
       run: |
+          kubectl get svc -A
           kubectl get pods -A
+          kubectl get nc -A
     - name: Build image
       run: |
           export SHELL=/bin/bash
