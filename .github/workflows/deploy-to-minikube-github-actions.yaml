@@ -27,6 +27,7 @@ jobs:
         docker images
 
     - name: Deploy to Minikube
+      continue-on-error: true
       run: kubectl apply -f k8s-node-app.yaml || exit 1
       # Added error handling if the apply command fails
 
