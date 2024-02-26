@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Start minikube
+        id: minikube
         uses: medyagh/setup-minikube@latest
       - name: Try the cluster !
         run: |
@@ -26,6 +27,7 @@ jobs:
           kubectl apply -f k8s-node-app.yaml
           kubectl get pods -A
           kubectl get svc -A
+          kubectl get deployment -A
       - name: Test service URLs
         run: |
           minikube service list
