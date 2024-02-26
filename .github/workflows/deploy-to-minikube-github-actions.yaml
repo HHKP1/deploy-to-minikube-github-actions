@@ -35,5 +35,5 @@ jobs:
           kubectl logs -l app=nodejs-app || true
 
       - name: Check job status
-              if: ${{ job.status != 'success' }}
-              run: echo "The job failed with status ${{ job.status }}"
+          if: ${{ job.status != 'success' }}
+          run: echo "The job failed with status ${{ job.status }}"
