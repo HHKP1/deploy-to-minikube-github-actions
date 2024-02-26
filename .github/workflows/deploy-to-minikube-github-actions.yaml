@@ -30,7 +30,6 @@ jobs:
 
       - name: Test service URLs
         run: |
+          kubectl logs -l app=nodejs-app
           minikube service list
           minikube service nodejs-app --url
-      - name: Get pod logs
-        run: kubectl logs -l app=nodejs-app
