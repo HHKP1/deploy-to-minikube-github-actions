@@ -30,7 +30,7 @@ metadata:
 spec:
   selector:
     app: node-app
-  type: NodePort
+  type: ClusterIP
   ports:
   - name: http
     targetPort: 3000

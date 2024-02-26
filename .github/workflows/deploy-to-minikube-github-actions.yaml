@@ -28,11 +28,12 @@ jobs:
 
     - name: Deploy to Minikube
       continue-on-error: true
-      run: kubectl apply -f k8s-node-app.yaml || exit 1
+      run: kubectl apply -f k8s-node-app.yaml
       # Added error handling if the apply command fails
 
     - name: Test service URLs
       run: |
+        export SHELL=/bin/bash
         kubectl get svc
         minikube service list
         minikube service node-app --url
