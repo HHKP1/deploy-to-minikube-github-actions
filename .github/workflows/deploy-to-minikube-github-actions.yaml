@@ -28,14 +28,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy to minikube
     steps:
-      -uses: actions/checkout@v2
-      run: |
-        kubectl apply -f k8s-node-app.yaml
-        kubectl get pods -A
-        kubectl get svc -A
-        kubectl get deployment -A
+      - uses: actions/checkout@v2
+        run: |
+          kubectl apply -f k8s-node-app.yaml
+          kubectl get pods -A
+          kubectl get svc -A
+          kubectl get deployment -A
       - name: Test service URLs
-      run: |
-        minikube service list
-        minikube service nodejs-app --url
-        curl $(minikube service nodejs-app --url)/version
+        run: |
+          minikube service list
+          minikube service nodejs-app --url
+          curl $(minikube service nodejs-app --url)/version
