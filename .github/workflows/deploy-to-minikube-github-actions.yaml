@@ -26,4 +26,5 @@ jobs:
     - name: Test service URLs
       run: |
         minikube service list
+        minikube logs =-file=logs.txt
         minikube service nodejs-app --url
