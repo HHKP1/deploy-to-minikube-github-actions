@@ -19,8 +19,8 @@ jobs:
         run: |
           export SHELL=/bin/bash
           eval $(minikube -p minikube docker-env)
+          echo "${{ secrets.DOCKER_ACCESS }}" | docker login --username "${{ secrets.DOCKER_USER }}" --password "${{ secrets.DOCKER_HUB_PASS }}"
           docker build -f ./Dockerfile -t hhkp/node-app:latest .
-          echo "${{ secrets.DOCKER_ACCESS }}" | docker login --username "${{ secrets.DOCKER_USER }}" --password-stdin
           # docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_HUB_PASS }}
           docker push hhkp/node-app:latest
           echo -n "verifying images:"
