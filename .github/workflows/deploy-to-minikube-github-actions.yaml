@@ -30,6 +30,11 @@ jobs:
           kubectl get pods -A
           kubectl get svc -A
           kubectl get deployment -A
+      - name: Print Kubernetes Context
+        run: kubectl config current-context
+      - name: Wait for CoreDNS Pod Readiness
+        run: |
+          kubectl wait --for=condition=ready pod -l k8s-app=kube-dns -n kube-system --timeout=300s
       - name: Test service URLs
         run: |
           minikube service list
